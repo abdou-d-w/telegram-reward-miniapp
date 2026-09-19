@@ -60,15 +60,18 @@ async function loadUser() {
 
         // Username / name
 
-        const displayName =
-            user.first_name ||
-            user.username ||
-            "Player";
+       const telegramUser = tg.initDataUnsafe?.user;
 
+const displayName =
+    telegramUser?.first_name ||
+    telegramUser?.username ||
+    user.first_name ||
+    user.username ||
+    "Player";
 
-        document
-            .getElementById("username")
-            .textContent = displayName;
+document
+    .getElementById("username")
+    .textContent = displayName;
 
 
         // Points
