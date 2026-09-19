@@ -61,11 +61,12 @@ async function loadUser() {
         // Username / name
 
  const displayName =
-    user.display_name || "Player";
+    user.display_name ||
+    user.first_name ||
+    user.username ||
+    "Player";
 
-document
-    .getElementById("username")
-    .textContent = displayName;
+document.getElementById("username").textContent = displayName;
 
         // Points
 
