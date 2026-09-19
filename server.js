@@ -189,19 +189,19 @@ app.post("/api/user", async (req, res) => {
         );
 
 
-    const user = result.rows[0];
+const user = result.rows[0];
 
 const displayName =
-    user.first_name ||
-    user.username ||
+    telegramUser.first_name ||
+    telegramUser.username ||
     "Player";
 
 res.json({
     success: true,
     user: {
         telegram_id: user.telegram_id,
-        username: user.username,
-        first_name: user.first_name,
+        username: telegramUser.username || null,
+        first_name: telegramUser.first_name || null,
         display_name: displayName,
         points: user.points
     }
