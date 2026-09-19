@@ -189,13 +189,20 @@ app.post("/api/user", async (req, res) => {
         );
 
 
-        const user = result.rows[0];
+    const user = result.rows[0];
 
+const displayName =
+    user.first_name ||
+    user.username ||
+    "Player";
 
-        res.json({
-            success: true,
-            user
-        });
+res.json({
+    success: true,
+    user: {
+        ...user,
+        display_name: displayName
+    }
+});
 
 
     } catch (error) {
