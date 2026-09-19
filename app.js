@@ -56,7 +56,12 @@ async function loadUser() {
 
 
         const user = data.user;
-
+tg.showAlert(
+    "first_name: " +
+    (user.first_name || "EMPTY") +
+    "\nusername: " +
+    (user.username || "EMPTY")
+);
 
         // Username / name
 
