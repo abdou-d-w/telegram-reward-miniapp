@@ -4,23 +4,104 @@ tg.ready();
 tg.expand();
 
 
-// Telegram user
+// ==============================
+// Register Telegram user
+// ==============================
 
-const user = tg.initDataUnsafe?.user;
+async function loadUser() {
 
-if (user) {
+    try {
 
-    const name =
-        user.first_name ||
-        user.username ||
-        "Player";
+        const initData = tg.initData;
 
-    document.getElementById("username").textContent = name;
+        if (!initData) {
+
+            console.log(
+                "Telegram initData is not available"
+            );
+
+            return;
+
+        }
+
+
+        const response = await fetch(
+            "/api/user",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    initData: initData
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+            console.error(
+                data.message
+            );
+
+            return;
+
+        }
+
+
+        const user = data.user;
+
+
+        // Username / name
+
+        const displayName =
+            user.first_name ||
+            user.username ||
+            "Player";
+
+
+        document
+            .getElementById("username")
+            .textContent = displayName;
+
+
+        // Points
+
+        document
+            .getElementById("balance")
+            .textContent = user.points;
+
+
+        console.log(
+            "User loaded successfully:",
+            user
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load user:",
+            error
+        );
+
+    }
 
 }
 
 
+loadUser();
+
+
+// ==============================
 // Play button
+// ==============================
 
 document
     .getElementById("playButton")
@@ -33,7 +114,9 @@ document
     });
 
 
+// ==============================
 // Rewards
+// ==============================
 
 document
     .getElementById("rewards")
@@ -46,7 +129,9 @@ document
     });
 
 
+// ==============================
 // Referral
+// ==============================
 
 document
     .getElementById("referral")
@@ -59,7 +144,9 @@ document
     });
 
 
+// ==============================
 // Leaderboard
+// ==============================
 
 document
     .getElementById("leaderboard")
@@ -72,7 +159,9 @@ document
     });
 
 
+// ==============================
 // Profile
+// ==============================
 
 document
     .getElementById("profile")
