@@ -199,8 +199,11 @@ const displayName =
 res.json({
     success: true,
     user: {
-        ...user,
-        display_name: displayName
+        telegram_id: user.telegram_id,
+        username: user.username,
+        first_name: user.first_name,
+        display_name: displayName,
+        points: user.points
     }
 });
 
