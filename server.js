@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const crypto = require("crypto");
 const { Pool } = require("pg");
 
 const app = express();
@@ -7,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 
-// PostgreSQL connection
+// PostgreSQL
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -24,7 +25,66 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 
-// Create database tables
+// ==============================
+// Telegram initData verification
+// ==============================
+
+function verifyTelegramWebAppData(initData) {
+
+    if (!initData) {
+        return null;
+    }
+
+    const params = new URLSearchParams(initData);
+
+    const receivedHash = params.get("hash");
+
+    if (!receivedHash) {
+        return null;
+    }
+
+    params.delete("hash");
+
+    const dataCheckString = [...params.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, value]) => `${key}=${value}`)
+        .join("\n");
+
+    const secretKey = crypto
+        .createHmac("sha256", "WebAppData")
+        .update(process.env.BOT_TOKEN)
+        .digest();
+
+    const calculatedHash = crypto
+        .createHmac("sha256", secretKey)
+        .update(dataCheckString)
+        .digest("hex");
+
+    if (calculatedHash !== receivedHash) {
+        return null;
+    }
+
+    const userData = params.get("user");
+
+    if (!userData) {
+        return null;
+    }
+
+    try {
+
+        return JSON.parse(userData);
+
+    } catch {
+
+        return null;
+
+    }
+}
+
+
+// ==============================
+// Database
+// ==============================
 
 async function initializeDatabase() {
 
@@ -43,7 +103,9 @@ async function initializeDatabase() {
 }
 
 
+// ==============================
 // Main page
+// ==============================
 
 app.get("/", (req, res) => {
 
@@ -54,7 +116,9 @@ app.get("/", (req, res) => {
 });
 
 
+// ==============================
 // Health check
+// ==============================
 
 app.get("/api/health", (req, res) => {
 
@@ -66,11 +130,97 @@ app.get("/api/health", (req, res) => {
 });
 
 
+// ==============================
+// Register / get user
+// ==============================
+
+app.post("/api/user", async (req, res) => {
+
+    try {
+
+        const { initData } = req.body;
+
+        const telegramUser =
+            verifyTelegramWebAppData(initData);
+
+        if (!telegramUser) {
+
+            return res.status(401).json({
+                success: false,
+                message: "Invalid Telegram data"
+            });
+
+        }
+
+
+        const telegramId = telegramUser.id;
+
+        const username =
+            telegramUser.username || null;
+
+        const firstName =
+            telegramUser.first_name || null;
+
+
+        const result = await pool.query(
+            `
+            INSERT INTO users
+                (telegram_id, username, first_name)
+            VALUES
+                ($1, $2, $3)
+
+            ON CONFLICT (telegram_id)
+
+            DO UPDATE SET
+                username = EXCLUDED.username,
+                first_name = EXCLUDED.first_name
+
+            RETURNING
+                telegram_id,
+                username,
+                first_name,
+                points
+            `,
+            [
+                telegramId,
+                username,
+                firstName
+            ]
+        );
+
+
+        const user = result.rows[0];
+
+
+        res.json({
+            success: true,
+            user
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+
+    }
+
+});
+
+
+// ==============================
 // Start server
+// ==============================
 
 app.listen(PORT, async () => {
 
-    console.log(`Server running on port ${PORT}`);
+    console.log(
+        `Server running on port ${PORT}`
+    );
 
     try {
 
