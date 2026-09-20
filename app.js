@@ -59,3 +59,66 @@ if (telegramUser) {
     document.getElementById("username").textContent =
         "Telegram User";
 }
+// ===============================
+// DAILY REWARD
+// ===============================
+
+const dailyRewardBtn = document.getElementById("dailyRewardBtn");
+const dailyRewardMessage = document.getElementById("dailyRewardMessage");
+
+if (dailyRewardBtn) {
+
+    dailyRewardBtn.addEventListener("click", async () => {
+
+        dailyRewardBtn.disabled = true;
+        dailyRewardMessage.textContent = "⏳ Claiming reward...";
+
+        try {
+
+            const response = await fetch("/api/daily-reward", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    initData: tg.initData
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success && data.claimed) {
+
+                // تحديث الرصيد
+                const pointsElement = document.getElementById("points");
+
+                if (pointsElement) {
+                    pointsElement.textContent = data.points;
+                }
+
+                dailyRewardMessage.textContent =
+                    `🎉 You received ${data.reward} points!`;
+
+                dailyRewardBtn.textContent =
+                    "✅ Reward Claimed";
+
+            } else {
+
+                dailyRewardMessage.textContent =
+                    "⏰ You already claimed today's reward.";
+
+                dailyRewardBtn.textContent =
+                    "✅ Already Claimed";
+            }
+
+        } catch (error) {
+
+            console.error("Daily reward error:", error);
+
+            dailyRewardMessage.textContent =
+                "❌ Something went wrong. Please try again.";
+
+            dailyRewardBtn.disabled = false;
+        }
+    });
+}
