@@ -137,115 +137,69 @@ app.get("/api/health", (req, res) => {
 // Register / get user
 // ==============================
 
-app.post("/api/user", async (req, res) => {
-
+app.post("/api/daily-reward", async (req, res) => {
     try {
-
         const { initData } = req.body;
 
-        const telegramUser =
-            verifyTelegramWebAppData(initData);
+        const telegramData = verifyTelegramWebAppData(initData);
 
-        if (!telegramUser) {
-
+        if (!telegramData) {
             return res.status(401).json({
                 success: false,
                 message: "Invalid Telegram data"
             });
-
         }
 
-
+        const telegramUser = JSON.parse(telegramData.user);
         const telegramId = telegramUser.id;
 
-        const username =
-            telegramUser.username || null;
+        // تاريخ اليوم حسب توقيت الجزائر
+        const today = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "Africa/Algiers",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }).format(new Date());
 
-        const firstName =
-            telegramUser.first_name || null;
-
+        // المكافأة اليومية
+        const reward = 100;
 
         const result = await pool.query(
             `
-            INSERT INTO users
-                (telegram_id, username, first_name)
-            VALUES
-                ($1, $2, $3)
-
-            ON CONFLICT (telegram_id)
-
-            DO UPDATE SET
-                username = EXCLUDED.username,
-                first_name = EXCLUDED.first_name
-
-            RETURNING
-                telegram_id,
-                username,
-                first_name,
-                points
+            UPDATE users
+            SET points = points + $1,
+                last_daily_claim = NOW()
+            WHERE telegram_id = $2
+            AND (
+                last_daily_claim IS NULL
+                OR (last_daily_claim AT TIME ZONE 'Africa/Algiers')::date <> $3::date
+            )
+            RETURNING points;
             `,
-            [
-                telegramId,
-                username,
-                firstName
-            ]
+            [reward, telegramId, today]
         );
 
+        if (result.rows.length === 0) {
+            return res.json({
+                success: false,
+                claimed: false,
+                message: "Daily reward already claimed today."
+            });
+        }
 
-const user = result.rows[0];
-
-const displayName =
-    telegramUser.first_name ||
-    telegramUser.username ||
-    "Player";
-
-res.json({
-    success: true,
-    user: {
-        telegram_id: user.telegram_id,
-        username: telegramUser.username || null,
-        first_name: telegramUser.first_name || null,
-        display_name: displayName,
-        points: user.points
-    }
-});
-
+        res.json({
+            success: true,
+            claimed: true,
+            reward: reward,
+            points: result.rows[0].points
+        });
 
     } catch (error) {
-
-        console.error(error);
+        console.error("Daily reward error:", error);
 
         res.status(500).json({
             success: false,
             message: "Server error"
         });
-
     }
-
-});
-
-
-// ==============================
-// Start server
-// ==============================
-
-app.listen(PORT, async () => {
-
-    console.log(
-        `Server running on port ${PORT}`
-    );
-
-    try {
-
-        await initializeDatabase();
-
-    } catch (error) {
-
-        console.error(
-            "Database initialization error:",
-            error
-        );
-
-    }
-
 });
