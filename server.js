@@ -98,7 +98,10 @@ async function initializeDatabase() {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     `);
-
+   await pool.query(`
+        ALTER TABLE users
+        ADD COLUMN IF NOT EXISTS last_daily_claim TIMESTAMPTZ;
+    `);
     console.log("Database initialized");
 }
 
