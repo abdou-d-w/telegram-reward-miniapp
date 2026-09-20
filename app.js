@@ -37,9 +37,10 @@ async function loadUser() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                initData: tg.initData
-            })
+       body: JSON.stringify({
+    initData: tg.initData,
+    startParam: tg.initDataUnsafe?.start_param || ""
+})
         });
 
         const data = await response.json();
