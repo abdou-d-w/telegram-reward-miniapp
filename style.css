@@ -283,43 +283,6 @@ button {
 }
 
 
-/* ==============================
-   PROFILE
-============================== */
-
-.profile-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.profile-info > div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 11px 12px;
-
-    background: #0f172a;
-    border-radius: 10px;
-}
-
-.profile-info span {
-    color: #94a3b8;
-    font-size: 13px;
-}
-
-.profile-info strong {
-    color: #ffffff;
-    font-size: 13px;
-
-    max-width: 55%;
-    text-align: right;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 
 
 /* ==============================
