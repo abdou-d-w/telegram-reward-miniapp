@@ -93,22 +93,29 @@ function verifyTelegramWebAppData(initData) {
 
 async function initializeDatabase() {
 
-    await pool.query(`
-        CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            telegram_id BIGINT UNIQUE NOT NULL,
-            username TEXT,
-            first_name TEXT,
-            points INTEGER DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            last_daily_claim TIMESTAMPTZ
-        );
-    `);
+await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        telegram_id BIGINT UNIQUE NOT NULL,
+        username TEXT,
+        first_name TEXT,
+        points INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        last_daily_claim TIMESTAMPTZ,
+        referred_by BIGINT,
+        referral_count INTEGER DEFAULT 0
+    );
+`);
 
-    await pool.query(`
-        ALTER TABLE users
-        ADD COLUMN IF NOT EXISTS last_daily_claim TIMESTAMPTZ;
-    `);
+await pool.query(`
+    ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS referred_by BIGINT;
+`);
+
+await pool.query(`
+    ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS referral_count INTEGER DEFAULT 0;
+`);
 
     console.log("Database initialized successfully.");
 }
