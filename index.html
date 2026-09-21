@@ -1,329 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <meta name="theme-color"
-          content="#111827">
-
-    <title>Reward Arena</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Telegram Mini App -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <title>TapRush</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-
 <body>
-
-    <div class="app">
-
-        <!-- =========================
-             HEADER
-        ========================== -->
-
-        <header class="header">
-
-            <div class="header-user">
-
-                <p class="welcome">
-                    Welcome back 👋
-                </p>
-
-                <h1 id="username">
-                    Player
-                </h1>
-
-            </div>
-
-            <div class="avatar" id="avatar">
-                👤
-            </div>
-
-        </header>
-
-
-        <!-- =========================
-             BALANCE
-        ========================== -->
-
-        <section class="balance-card">
-
-            <div class="balance-info">
-
-                <span class="balance-label">
-                    Your Balance
-                </span>
-
-                <div class="balance-row">
-
-                    <strong id="points">
-                        0
-                    </strong>
-
-                    <span class="points-label">
-                        Points
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="balance-icon">
-                💰
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             MAIN CONTENT
-        ========================== -->
-
-        <main class="content">
-
-            <!-- PLAY -->
-
-            <section class="section-card">
-
-                <div class="section-title">
-                    <h2>
-                        🎮 Play
-                    </h2>
-
-                    <span>
-                        Earn points
-                    </span>
-                </div>
-
-                <button class="main-btn">
-                    ▶ Play Now
-                </button>
-
-            </section>
-
-
-            <!-- =========================
-                 DAILY REWARD
-            ========================== -->
-
-            <section class="section-card">
-
-                <div class="section-title">
-
-                    <div>
-                        <h2>
-                            🎁 Daily Reward
-                        </h2>
-
-                        <span>
-                            Claim your daily points
-                        </span>
-                    </div>
-
-                </div>
-
-                <button
-                    id="dailyRewardBtn"
-                    class="reward-btn"
-                    type="button">
-
-                    🎁 Claim Daily Reward
-
-                </button>
-
-                <p id="dailyRewardMessage"></p>
-
-            </section>
-
-
-            <!-- =========================
-                 REFERRAL
-            ========================== -->
-
-            <section class="section-card">
-
-                <div class="section-title">
-
-                    <div>
-                        <h2>
-                            👥 Referral
-                        </h2>
-
-                        <span>
-                            Invite friends and earn
-                        </span>
-                    </div>
-
-                </div>
-
-                <button class="main-btn">
-                    🔗 Invite Friends
-                </button>
-
-            </section>
-
-
-            <!-- =========================
-                 RANKING
-            ========================== -->
-
-            <section class="section-card">
-
-                <div class="section-title">
-
-                    <div>
-                        <h2>
-                            🏆 Ranking
-                        </h2>
-
-                        <span>
-                            See top players
-                        </span>
-                    </div>
-
-                </div>
-
-                <button class="main-btn">
-                    🏆 View Ranking
-                </button>
-
-            </section>
-
-
-            <!-- =========================
-                 PROFILE
-            ========================== -->
-
-            <section class="section-card">
-
-                <div class="section-title">
-
-                    <div>
-                        <h2>
-                            👤 Profile
-                        </h2>
-
-                        <span>
-                            Your account
-                        </span>
-                    </div>
-
-                </div>
-
-                <div class="profile-info">
-
-                    <div>
-                        <span>
-                            Name
-                        </span>
-
-                        <strong id="profileName">
-                            -
-                        </strong>
-                    </div>
-
-                    <div>
-                        <span>
-                            Username
-                        </span>
-
-                        <strong id="profileUsername">
-                            -
-                        </strong>
-                    </div>
-
-                </div>
-
-            </section>
-
-        </main>
-
-
-        <!-- =========================
-             BOTTOM NAVIGATION
-        ========================== -->
-
-        <nav class="bottom-nav">
-
-            <button class="nav-item active"
-                    type="button">
-
-                <span>
-                    🏠
-                </span>
-
-                <small>
-                    Home
-                </small>
-
-            </button>
-
-            <button class="nav-item"
-                    type="button">
-
-                <span>
-                    🎁
-                </span>
-
-                <small>
-                    Rewards
-                </small>
-
-            </button>
-
-            <button class="nav-item"
-                    type="button">
-
-                <span>
-                    👥
-                </span>
-
-                <small>
-                    Referral
-                </small>
-
-            </button>
-
-            <button class="nav-item"
-                    type="button">
-
-                <span>
-                    🏆
-                </span>
-
-                <small>
-                    Ranking
-                </small>
-
-            </button>
-
-            <button class="nav-item"
-                    type="button">
-
-                <span>
-                    👤
-                </span>
-
-                <small>
-                    Profile
-                </small>
-
-            </button>
-
-        </nav>
-
+<div class="app">
+
+  <header class="header">
+    <div>
+      <p class="welcome">Welcome back 👋</p>
+      <h1 id="username">Player</h1>
     </div>
+    <div class="avatar" id="avatar">👤</div>
+  </header>
 
+  <section class="balance-card">
+    <div>
+      <span class="balance-label">Your Balance</span>
+      <div class="balance-row">
+        <strong id="points">0</strong>
+        <span class="points-label">Points</span>
+      </div>
+    </div>
+    <div class="balance-icon">💰</div>
+  </section>
 
-    <!-- JavaScript -->
-    <script src="app.js?v=5"></script>
+  <main>
 
+    <section class="page active" id="page-home">
+      <div class="hero-card">
+        <div>
+          <span class="eyebrow">PLAY & EARN</span>
+          <h2>Turn activity into points.</h2>
+          <p>Complete tasks, claim your daily reward and invite friends.</p>
+        </div>
+        <div class="hero-icon">⚡</div>
+      </div>
+
+      <section class="section-card">
+        <div class="section-title">
+          <div>
+            <h2>🎁 Daily Reward</h2>
+            <span>One reward every day</span>
+          </div>
+        </div>
+        <button id="dailyRewardBtn" class="reward-btn">🎁 Claim Daily Reward</button>
+        <p id="dailyRewardMessage"></p>
+      </section>
+
+      <section class="section-card">
+        <div class="section-title">
+          <div>
+            <h2>🚀 Quick Start</h2>
+            <span>Choose what you want to do</span>
+          </div>
+        </div>
+        <div class="quick-grid">
+          <button class="quick-btn" data-page="tasks"><span>🎯</span>Tasks</button>
+          <button class="quick-btn" data-page="referral"><span>👥</span>Invite</button>
+          <button class="quick-btn" data-page="ranking"><span>🏆</span>Ranking</button>
+          <button class="quick-btn" data-page="profile"><span>👤</span>Profile</button>
+        </div>
+      </section>
+    </section>
+
+    <section class="page" id="page-tasks">
+      <div class="page-heading">
+        <h2>🎯 Tasks</h2>
+        <p>Complete tasks and collect points.</p>
+      </div>
+      <div id="tasksList" class="list"></div>
+    </section>
+
+    <section class="page" id="page-referral">
+      <div class="page-heading">
+        <h2>👥 Referral</h2>
+        <p>Invite friends and earn 500 points for each new user.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span>Friends invited</span>
+          <strong id="referralCount">0</strong>
+        </div>
+        <div class="stat-card">
+          <span>Reward / invite</span>
+          <strong>500</strong>
+        </div>
+      </div>
+
+      <section class="section-card">
+        <h3>Your referral link</h3>
+        <div class="copy-box">
+          <input id="referralLink" readonly value="Loading...">
+          <button id="copyReferralBtn">Copy</button>
+        </div>
+        <button id="shareReferralBtn" class="main-btn">📤 Share with Friends</button>
+        <p id="referralMessage"></p>
+      </section>
+    </section>
+
+    <section class="page" id="page-ranking">
+      <div class="page-heading">
+        <h2>🏆 Ranking</h2>
+        <p>Top 20 players by points.</p>
+      </div>
+      <div id="leaderboardList" class="leaderboard"></div>
+    </section>
+
+    <section class="page" id="page-profile">
+      <div class="page-heading">
+        <h2>👤 Profile</h2>
+        <p>Your account information.</p>
+      </div>
+
+      <section class="section-card profile-card">
+        <div class="profile-avatar" id="profileAvatar">👤</div>
+        <h3 id="profileName">-</h3>
+        <p id="profileUsername">@-</p>
+        <div class="profile-grid">
+          <div><span>Points</span><strong id="profilePoints">0</strong></div>
+          <div><span>Referrals</span><strong id="profileReferrals">0</strong></div>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <h3>💸 Withdraw</h3>
+        <p class="muted">Minimum: 1000 points. Requests are reviewed manually.</p>
+        <input id="withdrawAmount" class="field" type="number" min="1000" placeholder="Points amount">
+        <select id="withdrawMethod" class="field">
+          <option value="">Select method</option>
+          <option value="USDT">USDT</option>
+          <option value="PayPal">PayPal</option>
+          <option value="Other">Other</option>
+        </select>
+        <input id="withdrawDestination" class="field" type="text" placeholder="Wallet / email / destination">
+        <button id="withdrawBtn" class="main-btn">Request Withdrawal</button>
+        <p id="withdrawMessage"></p>
+      </section>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="home"><span>🏠</span><small>Home</small></button>
+    <button class="nav-item" data-page="tasks"><span>🎁</span><small>Tasks</small></button>
+    <button class="nav-item" data-page="referral"><span>👥</span><small>Invite</small></button>
+    <button class="nav-item" data-page="ranking"><span>🏆</span><small>Ranking</small></button>
+    <button class="nav-item" data-page="profile"><span>👤</span><small>Profile</small></button>
+  </nav>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="app.js?v=10"></script>
 </body>
-
 </html>
